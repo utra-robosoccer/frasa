@@ -14,17 +14,19 @@ The platform used for this project is the *Sigmaban humanoid robot*, developed b
 
 ## Installation
 
-To install frasa-env from source, you can use the following commands:
+First of all, you need to install RL Baselines3 Zoo to train and enjoy agents:
+
+```
+pip install rl_zoo3
+```
+
+Then, you can install frasa-env from source using the following commands:
 
 ```
 pip install -e .
 ```
 
-To train and enjoy, install RL Baselines3 Zoo:
-
-```
-pip install rl_zoo3
-```
+Please note that the RL Baselines3 Zoo create a conflict on the gymnasium module version with the frasa-env. The correct version of gymnasium to use is 0.29.1, which should be the one installed if you follow the instructions above.
 
 ### Issue with MuJoCo using Wayland
 

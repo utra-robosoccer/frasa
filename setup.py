@@ -4,7 +4,7 @@ setup(name="frasa_env",
       version="1.0", 
       description='FRASA RL Environment',
       install_requires=[
-          "gymnasium>=0.29.0",
+          "gymnasium==0.29.1",
           "numpy>=1.20.0",
           "stable_baselines3>=2.1.0",
           "sb3-contrib>=2.1.0", 
