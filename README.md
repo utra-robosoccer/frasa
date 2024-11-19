@@ -75,7 +75,7 @@ python standup_generate_initial.py
 ```
 
 It will generate initial positions by letting the robot fall from random positions 
-and store them in `mujoco_rhoban_env/standup_initial_configurations.pkl`.
+and store them in `frasa_env/env/standup_initial_configurations.pkl`.
 Let the script run until you have collected enough initial positions 
 (typically a few thousand). You can stop the script at any time using Ctrl+C; 
 the generated positions will be saved automatically.

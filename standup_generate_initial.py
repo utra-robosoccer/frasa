@@ -3,7 +3,7 @@ import pickle
 import os
 import gymnasium as gym
 
-env = gym.make("sigmaban-standup-v0")
+env = gym.make("frasa-standup-v0")
 configs: list = []
 filename: str = env.get_initial_config_filename()
 
