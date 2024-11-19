@@ -20,7 +20,7 @@ First of all, you need to install RL Baselines3 Zoo to train and enjoy agents:
 pip install rl_zoo3
 ```
 
-Then, you can install frasa-env from source using the following commands:
+Then, you can install frasa-env from source using the following command:
 
 ```
 pip install -e .
