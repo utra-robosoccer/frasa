@@ -8,8 +8,8 @@ The methodology and results of this work are detailed in [this paper](https://ar
 The platform used for this project is the *Sigmaban humanoid robot*, developed by the *Rhoban Team*. The performance of the trained agent has been validated on the physical robot, as demonstrated in the examples below:
 
 <div align=center />
-   <img src="https://github.com/user-attachments/assets/b5171624-5f00-47ac-be26-74dd8c9a6a59" alt="Pull_back" width="47%" maxwidth="500px">
-   <img src="https://github.com/user-attachments/assets/c0fd6fb8-70a3-44b0-b22e-dd35e792a52c" alt="Pull_front" width="47%" maxwidth="500px">
+   <img src="https://github.com/user-attachments/assets/52333ee2-8c39-40f3-acb4-0d816a807dfa" alt="Pull_back" width="47%" maxwidth="500px">
+   <img src="https://github.com/user-attachments/assets/6e015b8b-a0ed-45c1-be39-5183c4b9a0f5" alt="Pull_front" width="47%" maxwidth="500px">
 </div>
 
 ## Installation
@@ -82,7 +82,7 @@ Let the script run until you have collected enough initial positions
 (typically a few thousand). You can stop the script at any time using Ctrl+C; 
 the generated positions will be saved automatically.
 
-<img src="https://github.com/user-attachments/assets/e8da3ff2-d6e3-475b-81af-a2779ebf4fc2" width="40%" align="right">
+<img src="https://github.com/user-attachments/assets/876ea026-487d-4c27-8c95-98c2bbacc8ee" width="40%" align="right">
 
 ### Testing the environment
 
@@ -131,9 +131,10 @@ python enjoy_sbx.py \
     --exp-id 0
 ```
 
-<img src="https://github.com/user-attachments/assets/328e7da8-5b61-4f91-8e8a-fc3250124d2a" align="right" height="250px">
+<img src="https://github.com/user-attachments/assets/05655c5e-64e9-48f4-8f53-d401a03ba40e" align="right" height="250px">
 
 Where the arguments are:
+
 * `algo`: The RL algorithm to use
 * `env`: The environment to enjoy on
 * `gym-packages`: The gym package used to register the environment
@@ -143,7 +144,7 @@ Where the arguments are:
 
 ## Sigmaban Model
 
-<img src="https://github.com/user-attachments/assets/e29b265a-add9-4e5d-8075-040106ddf39e" align=left height="260px">
+<img src="https://github.com/user-attachments/assets/0fab475c-8b60-48e9-aebe-0ca0506e3917" align=left height="260px">
 
 <br>
 
@@ -167,7 +168,7 @@ see the [README](frasa_env/mujoco_simulator/model/README.md) in the model direct
 
 The stand up environment can be found in `frasa_env/env/standup_env.py`.
 
-<img src="https://github.com/user-attachments/assets/9ed55e9d-a77d-44b4-b221-579ce7583565" align="right" width="50%">
+<img src="https://github.com/user-attachments/assets/053fce01-3255-4ad1-9377-e576d38ce44c" align="right" width="50%">
 
 The environment simplifies the learning process by controlling only the 5 DoFs presented on the right (elbow, shoulder_pitch, hip_pitch, knee, ankle_pitch). These are the primary joints involved in recovery and standing movements in the sagittal plane $(x, z)$. The actions are symmetrically applied to both sides of the robot.
 
