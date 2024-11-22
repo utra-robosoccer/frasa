@@ -1,6 +1,7 @@
 import os
 import pickle
 import random
+import warnings
 from typing import Optional
 
 import gymnasium
@@ -160,7 +161,7 @@ class StandupEnv(gymnasium.Env):
         initial_config_path = self.get_initial_config_filename()
         self.initial_config = None
         if os.path.exists(initial_config_path):
-            print(f"Loading initial configurations from {initial_config_path}")
+            # print(f"Loading initial configurations from {initial_config_path}")
             with open(initial_config_path, "rb") as f:
                 self.initial_config = pickle.load(f)
 
@@ -413,6 +414,11 @@ class StandupEnv(gymnasium.Env):
         options = options or {}
         target = options.get("target", False)
         use_cache = options.get("use_cache", True)
+
+        if use_cache and self.initial_config is not None:
+            warnings.warn(
+                "use_cache=True but no initial config file could be loaded." "Did you run standup_generate_initial.py?"
+            )
 
         # Initial robot configuration
         if use_cache and self.initial_config is not None:
