@@ -404,12 +404,13 @@ class StandupEnv(gymnasium.Env):
     def reset(
         self,
         seed: int = None,
-        target: bool = False,
-        use_cache: bool = True,
         options: Optional[dict] = None,
     ):
         super().reset(seed=seed)
         self.sim.reset()
+        options = options or {}
+        target = options.get("target", False)
+        use_cache = options.get("use_cache", True)
 
         # Initial robot configuration
         if use_cache and self.initial_config is not None:

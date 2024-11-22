@@ -16,7 +16,7 @@ if os.path.exists(filename):
 
 try:
     while True:
-        env.reset(use_cache=False)
+        env.reset(options={"use_cache": False})
         configs.append([env.unwrapped.sim.data.qpos.copy(), env.unwrapped.sim.data.ctrl.copy()])
 
         if len(configs) % 100 == 0:
