@@ -11,7 +11,7 @@ from frasa_env.mujoco_simulator.simulator import Simulator, tf
 
 
 class StandupEnv(gymnasium.Env):
-    metadata = {"render_modes": ["human", "none"]}
+    metadata = {"render_modes": ["human", "none"], "render_fps": 30}
 
     def __init__(self, render_mode="none", options: Optional[dict] = None, evaluation: bool = False):
         self.options = {
@@ -82,14 +82,14 @@ class StandupEnv(gymnasium.Env):
             )
         elif self.options["control"] == "velocity":
             self.action_space = spaces.Box(
-                np.array([-self.options["vmax"]] * len(self.dofs)),
-                np.array([self.options["vmax"]] * len(self.dofs)),
+                np.array([-self.options["vmax"]] * len(self.dofs), dtype=np.float32),
+                np.array([self.options["vmax"]] * len(self.dofs), dtype=np.float32),
                 dtype=np.float32,
             )
         elif self.options["control"] == "error":
             self.action_space = spaces.Box(
-                np.array([-np.pi / 4] * len(self.dofs)),
-                np.array([np.pi / 4] * len(self.dofs)),
+                np.array([-np.pi / 4] * len(self.dofs), dtype=np.float32),
+                np.array([np.pi / 4] * len(self.dofs), dtype=np.float32),
                 dtype=np.float32,
             )
         else:
@@ -111,7 +111,8 @@ class StandupEnv(gymnasium.Env):
                     -10,
                     # Previous action
                     *(list(self.action_space.low) * self.options["previous_actions"]),
-                ]
+                ],
+                dtype=np.float32,
             ),
             np.array(
                 [
@@ -127,7 +128,8 @@ class StandupEnv(gymnasium.Env):
                     10,
                     # Previous action
                     *(list(self.action_space.high) * self.options["previous_actions"]),
-                ]
+                ],
+                dtype=np.float32,
             ),
             dtype=np.float32,
         )
