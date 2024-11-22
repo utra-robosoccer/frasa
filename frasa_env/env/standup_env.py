@@ -1,6 +1,7 @@
 import os
 import pickle
 import random
+from typing import Optional
 
 import gymnasium
 import numpy as np
@@ -12,7 +13,7 @@ from frasa_env.mujoco_simulator.simulator import Simulator, tf
 class StandupEnv(gymnasium.Env):
     metadata = {"render_modes": ["human", "none"]}
 
-    def __init__(self, render_mode="none", options: dict = {}, evaluation: bool = False):
+    def __init__(self, render_mode="none", options: Optional[dict] = None, evaluation: bool = False):
         self.options = {
             # Duration of the stabilization pre-simulation (waiting for the gravity to stabilize the robot) [s]
             "stabilization_time": 2.0,
@@ -53,7 +54,7 @@ class StandupEnv(gymnasium.Env):
             # Previous actions
             "previous_actions": 1,
         }
-        self.options.update(options)
+        self.options.update(options or {})
 
         self.render_mode = render_mode
         self.sim = Simulator()
@@ -369,7 +370,7 @@ class StandupEnv(gymnasium.Env):
     def randomize_fall(self, target: bool = False):
         # Decide if we will use the target
         my_target = np.copy(self.options["desired_state"])
-        if target == False:
+        if target is False:
             target = self.np_random.random() < self.options["reset_final_p"]
 
         # Selecting a random configuration
@@ -397,7 +398,7 @@ class StandupEnv(gymnasium.Env):
         self.sim.set_T_world_site("trunk", T_world_trunk)
 
         # Wait for the robot to stabilize
-        for k in range(round(self.options["stabilization_time"] / self.sim.dt)):
+        for _ in range(round(self.options["stabilization_time"] / self.sim.dt)):
             self.sim.step()
 
     def reset(
@@ -405,7 +406,7 @@ class StandupEnv(gymnasium.Env):
         seed: int = None,
         target: bool = False,
         use_cache: bool = True,
-        options: dict = {},
+        options: Optional[dict] = None,
     ):
         super().reset(seed=seed)
         self.sim.reset()
