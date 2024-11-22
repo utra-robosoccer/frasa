@@ -1,7 +1,11 @@
-import frasa_env.env
-import pickle
 import os
+import pickle
+
 import gymnasium as gym
+
+import frasa_env
+
+gym.register_envs(frasa_env)
 
 env = gym.make("frasa-standup-v0")
 configs: list = []

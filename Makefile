@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-LINT_PATHS=frasa_env/ setup.py
+LINT_PATHS=frasa_env/ *.py
 
 mypy:
 	mypy ${LINT_PATHS}

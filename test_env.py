@@ -1,31 +1,23 @@
-import frasa_env
-import numpy as np
+import argparse
+
 import gymnasium as gym
+import numpy as np
 from stable_baselines3.common.noise import (
     NormalActionNoise,
     OrnsteinUhlenbeckActionNoise,
 )
-import argparse
 
-argparser = argparse.ArgumentParser(
-    description="Test the sigmaban-standup-v0 environment"
-)
-argparser.add_argument(
-    "--env", type=str, default="frasa-standup-v0", help="Environment to test"
-)
-argparser.add_argument(
-    "--random", action="store_true", help="Use random actions instead of zeros"
-)
+import frasa_env
+
+gym.register_envs(frasa_env)
+
+argparser = argparse.ArgumentParser(description="Test the sigmaban-standup-v0 environment")
+argparser.add_argument("--env", type=str, default="frasa-standup-v0", help="Environment to test")
+argparser.add_argument("--random", action="store_true", help="Use random actions instead of zeros")
 argparser.add_argument("--normal", action="store_true", help="Use normal action noise")
-argparser.add_argument(
-    "--orn", action="store_true", help="Use Ornstein-Uhlenbeck action noise"
-)
-argparser.add_argument(
-    "--std", type=float, default=0.1, help="Standard deviation for the action noise"
-)
-argparser.add_argument(
-    "--theta", type=float, default=0.15, help="Theta for the Ornstein-Uhlenbeck noise"
-)
+argparser.add_argument("--orn", action="store_true", help="Use Ornstein-Uhlenbeck action noise")
+argparser.add_argument("--std", type=float, default=0.1, help="Standard deviation for the action noise")
+argparser.add_argument("--theta", type=float, default=0.15, help="Theta for the Ornstein-Uhlenbeck noise")
 args = argparser.parse_args()
 
 env = gym.make(args.env)
