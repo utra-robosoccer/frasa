@@ -1,10 +1,11 @@
-import numpy as np
+import os
 import pickle
 import random
-import os
-import time
+
 import gymnasium
+import numpy as np
 from gymnasium import spaces
+
 from frasa_env.mujoco_simulator.simulator import Simulator, tf
 
 
@@ -285,7 +286,7 @@ class StandupEnv(gymnasium.Env):
 
         state_current = [*self.q_history[-1], self.tilt_history[-1]]
 
-        reward = np.exp(-20*(np.linalg.norm(np.array(state_current) - np.array(self.options["desired_state"]))**2))
+        reward = np.exp(-20 * (np.linalg.norm(np.array(state_current) - np.array(self.options["desired_state"])) ** 2))
 
         action_variation = np.abs(action - self.previous_actions[-1])
         self.previous_actions.append(action)

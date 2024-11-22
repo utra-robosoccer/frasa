@@ -1,5 +1,7 @@
-from .standup_env import StandupEnv
 import numpy as np
+
+from .standup_env import StandupEnv
+
 
 class FRASAEnv(StandupEnv):
     def __init__(self, evaluation="none", render_mode="none", options={}):

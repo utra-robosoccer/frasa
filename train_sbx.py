@@ -3,7 +3,7 @@ import rl_zoo3.train
 from rl_zoo3.train import train
 from sbx import DDPG, DQN, PPO, SAC, TD3, TQC, CrossQ
 
-import frasa_env  # noqa: F404
+import frasa_env  # noqa: F401
 
 rl_zoo3.ALGOS["ddpg"] = DDPG
 rl_zoo3.ALGOS["dqn"] = DQN

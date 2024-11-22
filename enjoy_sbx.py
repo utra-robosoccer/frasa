@@ -3,6 +3,8 @@ import rl_zoo3.enjoy
 from rl_zoo3.enjoy import enjoy
 from sbx import DDPG, DQN, PPO, SAC, TD3, TQC, CrossQ
 
+import frasa_env  # noqa: F401
+
 rl_zoo3.ALGOS["ddpg"] = DDPG
 rl_zoo3.ALGOS["dqn"] = DQN
 # See SBX readme to use DroQ configuration
