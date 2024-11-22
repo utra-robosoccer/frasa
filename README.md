@@ -30,13 +30,13 @@ Please note that the RL Baselines3 Zoo create a conflict on the gymnasium module
 
 ### Issue with MuJoCo using Wayland
 
-If you are using Wayland (instead of X11), you may encounter issues with the MuJoCo viewer, 
+If you are using Wayland (instead of X11), you may encounter issues with the MuJoCo viewer,
 such as frozen windows or buttons not working. To solve this, you can build
 GLFW from source with shared libraries and set the `LD_LIBRARY_PATH` and
 `PYGLFW_LIBRARY` environment variables to point to the built libraries.
 
 1. Download source package here and unzip it: https://www.glfw.org/download.html
-   
+
 2. Install dependancies to build GLFW for Wayland and X11
 
 ```
@@ -58,7 +58,7 @@ make
 ```
 
 5. Change LD_LIBRARY_PATH and PYGLFW_LIBRARY to match GLFW version you built and add it to your bashrc
-   
+
 ```
 export LD_LIBRARY_PATH="LD_LIBRARY_PATH:path/to/glfw/build/src/"
 export PYGLFW_LIBRARY="path/to/glfw/build/src/libglfw.so"
@@ -68,18 +68,18 @@ export PYGLFW_LIBRARY="path/to/glfw/build/src/libglfw.so"
 
 ### Generating initial positions
 
-Pre-generating initial positions for the standup environment is recommended, 
-as it can be time-consuming to generate them during training. To do so, you can 
+Pre-generating initial positions for the standup environment is recommended,
+as it can be time-consuming to generate them during training. To do so, you can
 use the standup_generate_initial.py script:
 
 ```bash
 python standup_generate_initial.py
 ```
 
-It will generate initial positions by letting the robot fall from random positions 
+It will generate initial positions by letting the robot fall from random positions
 and store them in `frasa_env/env/standup_initial_configurations.pkl`.
-Let the script run until you have collected enough initial positions 
-(typically a few thousand). You can stop the script at any time using Ctrl+C; 
+Let the script run until you have collected enough initial positions
+(typically a few thousand). You can stop the script at any time using Ctrl+C;
 the generated positions will be saved automatically.
 
 <img src="https://github.com/user-attachments/assets/876ea026-487d-4c27-8c95-98c2bbacc8ee" width="40%" align="right">
@@ -104,7 +104,6 @@ You can train an agent using:
 python train_sbx.py \
     --algo crossq \
     --env frasa-standup-v0 \
-    --gym-packages frasa_env \
     --conf hyperparams/crossq.yml
 ```
 
@@ -150,14 +149,14 @@ Where the arguments are:
 
 <br>
 
-The Sigmaban robot is a small humanoid developed by the Rhoban team to 
-compete in the RoboCup KidSize league. The robot is 70 cm tall and weighs 
-7.5 kg. It has 20 degrees of freedom, a camera, and is equipped with pressure 
-sensors and an IMU. 
+The Sigmaban robot is a small humanoid developed by the Rhoban team to
+compete in the RoboCup KidSize league. The robot is 70 cm tall and weighs
+7.5 kg. It has 20 degrees of freedom, a camera, and is equipped with pressure
+sensors and an IMU.
 
-The MuJoCo XML model of this robot is located in the `frasa_env/mujoco_simulator/model` folder. 
+The MuJoCo XML model of this robot is located in the `frasa_env/mujoco_simulator/model` folder.
 
-For a detailed description of the process to convert URDF to MuJoCo XML, 
+For a detailed description of the process to convert URDF to MuJoCo XML,
 see the [README](frasa_env/mujoco_simulator/model/README.md) in the model directory.
 
 <br>
@@ -172,7 +171,7 @@ The stand up environment can be found in `frasa_env/env/standup_env.py`.
 
 The environment simplifies the learning process by controlling only the 5 DoFs presented on the right (elbow, shoulder_pitch, hip_pitch, knee, ankle_pitch). These are the primary joints involved in recovery and standing movements in the sagittal plane $(x, z)$. The actions are symmetrically applied to both sides of the robot.
 
-The robot's state is characterized by the **pose vector** $\psi$, which includes the joint angles $q$ and the trunk pitch $\theta$. The target pose for recovery is defined as:  
+The robot's state is characterized by the **pose vector** $\psi$, which includes the joint angles $q$ and the trunk pitch $\theta$. The target pose for recovery is defined as:
 
 $$ \psi_{\text{target}} = [q_{\text{target}}, \theta_{\text{target}}] $$
 
@@ -180,7 +179,7 @@ This target pose represents the upright position the robot should achieve after 
 
 At the start of each episode, the robot’s joint angles $q$ and trunk pitch $\theta$ are set to random values within their
 physical limits. The robot is then released above the ground, simulating various fallen states. The physical simulation is
-then stepped using current joints configuration as targets, until stability is reached, at which point 
+then stepped using current joints configuration as targets, until stability is reached, at which point
 the learning process begins.
 
 An episode termination occurs when the robot reaches an unsafe or irreversible state:
@@ -206,7 +205,7 @@ The observation space for the **StandupEnv** captures key elements of the robot'
 
 ### Action Space
 
-The action space specifies control commands for the robot's 5 joints. Its structure depends on the control mode (`position`, `velocity`, or `error`) specified in `options["control"]`. 
+The action space specifies control commands for the robot's 5 joints. Its structure depends on the control mode (`position`, `velocity`, or `error`) specified in `options["control"]`.
 
 | **Mode** | **Description** | **Range** | **Notes** |
 |---|---|---|---|
@@ -226,7 +225,7 @@ $$ R = R_{state} + R_{variation} + R_{collision} $$
 
 The state proximity reward $R_{state}$ represents the proximity to the desired state $\psi_{target}$:
 
-$$ R_{state} = \text{exp}\left(-20 \cdot \left| \psi_{current} - \psi_\{target} \right|^2 \right) $$ 
+$$ R_{state} = \text{exp}\left(-20 \cdot \left| \psi_{current} - \psi_\{target} \right|^2 \right) $$
 
 2. Variation Penalty Reward
 
@@ -294,12 +293,12 @@ To cite this repository in publications:
 
 ```bibtex
 @article{frasa2024,
-   title={FRASA: An End-to-End Reinforcement Learning Agent for Fall Recovery and Stand Up of Humanoid Robots}, 
+   title={FRASA: An End-to-End Reinforcement Learning Agent for Fall Recovery and Stand Up of Humanoid Robots},
    author={Clément Gaspard and Marc Duclusaud and Grégoire Passault and Mélodie Daniel and Olivier Ly},
    year={2024},
    eprint={2410.08655},
    archivePrefix={arXiv},
    primaryClass={cs.RO},
-   url={https://arxiv.org/abs/2410.08655}, 
+   url={https://arxiv.org/abs/2410.08655},
 }
 ```
