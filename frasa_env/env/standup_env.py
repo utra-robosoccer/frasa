@@ -415,9 +415,9 @@ class StandupEnv(gymnasium.Env):
         target = options.get("target", False)
         use_cache = options.get("use_cache", True)
 
-        if use_cache and self.initial_config is not None:
+        if use_cache and self.initial_config is None:
             warnings.warn(
-                "use_cache=True but no initial config file could be loaded." "Did you run standup_generate_initial.py?"
+                "use_cache=True but no initial config file could be loaded. Did you run standup_generate_initial.py?"
             )
 
         # Initial robot configuration
