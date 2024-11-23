@@ -26,8 +26,6 @@ Then, you can install frasa-env from source using the following command:
 pip install -e .
 ```
 
-Please note that the RL Baselines3 Zoo create a conflict on the gymnasium module version with the frasa-env. The correct version of gymnasium to use is 0.29.1, which should be the one installed if you follow the instructions above.
-
 ### Issue with MuJoCo using Wayland
 
 If you are using Wayland (instead of X11), you may encounter issues with the MuJoCo viewer,
