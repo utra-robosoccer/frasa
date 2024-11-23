@@ -1,3 +1,4 @@
+from frasa_env.env.standup import FRASAEnv
 from frasa_env.env.standup_env import StandupEnv
 
-from frasa_env.env.standup import FRASAEnv
+__all__ = ["FRASAEnv", "StandupEnv"]

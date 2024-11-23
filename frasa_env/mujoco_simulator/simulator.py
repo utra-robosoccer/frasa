@@ -1,22 +1,22 @@
 import os
-import numpy as np
 import time
+from typing import Optional
+
+import meshcat.transformations as tf
 import mujoco
 import mujoco.viewer
-import meshcat.transformations as tf
+import numpy as np
 
 
 class Simulator:
-    def __init__(self, model_dir: str | None = None):
+    def __init__(self, model_dir: Optional[str] = None):
         # If model_dir is not provided, use the current directory
         if model_dir is None:
             model_dir = os.path.join(os.path.dirname(__file__) + "/model/")
         self.model_dir = model_dir
 
         # Load the model and data
-        self.model: mujoco.MjModel = mujoco.MjModel.from_xml_path(
-            f"{model_dir}/scene.xml"
-        )
+        self.model: mujoco.MjModel = mujoco.MjModel.from_xml_path(f"{model_dir}/scene.xml")
         self.data: mujoco.MjData = mujoco.MjData(self.model)
 
         # Retrieve the degrees of freedom id/name pairs
@@ -47,12 +47,9 @@ class Simulator:
 
     def centroidal_force(self) -> float:
         return np.linalg.norm(self.data.qfrc_constraint[3:])
-    
+
     def dof_names(self) -> list:
-        return [
-            mujoco.mj_id2name(self.model, mujoco.mjtObj.mjOBJ_ACTUATOR, i)
-            for i in range(self.model.nu)
-        ]
+        return [mujoco.mj_id2name(self.model, mujoco.mjtObj.mjOBJ_ACTUATOR, i) for i in range(self.model.nu)]
 
     def reset(self) -> None:
         mujoco.mj_resetData(self.model, self.data)

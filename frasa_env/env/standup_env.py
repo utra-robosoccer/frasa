@@ -1,17 +1,20 @@
-import numpy as np
+import os
 import pickle
 import random
-import os
-import time
+import warnings
+from typing import Optional
+
 import gymnasium
+import numpy as np
 from gymnasium import spaces
+
 from frasa_env.mujoco_simulator.simulator import Simulator, tf
 
 
 class StandupEnv(gymnasium.Env):
-    metadata = {"render_modes": ["human", "none"]}
+    metadata = {"render_modes": ["human", "none"], "render_fps": 30}
 
-    def __init__(self, render_mode="none", options: dict = {}, evaluation: bool = False):
+    def __init__(self, render_mode="none", options: Optional[dict] = None, evaluation: bool = False):
         self.options = {
             # Duration of the stabilization pre-simulation (waiting for the gravity to stabilize the robot) [s]
             "stabilization_time": 2.0,
@@ -52,7 +55,7 @@ class StandupEnv(gymnasium.Env):
             # Previous actions
             "previous_actions": 1,
         }
-        self.options.update(options)
+        self.options.update(options or {})
 
         self.render_mode = render_mode
         self.sim = Simulator()
@@ -80,14 +83,14 @@ class StandupEnv(gymnasium.Env):
             )
         elif self.options["control"] == "velocity":
             self.action_space = spaces.Box(
-                np.array([-self.options["vmax"]] * len(self.dofs)),
-                np.array([self.options["vmax"]] * len(self.dofs)),
+                np.array([-self.options["vmax"]] * len(self.dofs), dtype=np.float32),
+                np.array([self.options["vmax"]] * len(self.dofs), dtype=np.float32),
                 dtype=np.float32,
             )
         elif self.options["control"] == "error":
             self.action_space = spaces.Box(
-                np.array([-np.pi / 4] * len(self.dofs)),
-                np.array([np.pi / 4] * len(self.dofs)),
+                np.array([-np.pi / 4] * len(self.dofs), dtype=np.float32),
+                np.array([np.pi / 4] * len(self.dofs), dtype=np.float32),
                 dtype=np.float32,
             )
         else:
@@ -109,7 +112,8 @@ class StandupEnv(gymnasium.Env):
                     -10,
                     # Previous action
                     *(list(self.action_space.low) * self.options["previous_actions"]),
-                ]
+                ],
+                dtype=np.float32,
             ),
             np.array(
                 [
@@ -125,7 +129,8 @@ class StandupEnv(gymnasium.Env):
                     10,
                     # Previous action
                     *(list(self.action_space.high) * self.options["previous_actions"]),
-                ]
+                ],
+                dtype=np.float32,
             ),
             dtype=np.float32,
         )
@@ -156,7 +161,7 @@ class StandupEnv(gymnasium.Env):
         initial_config_path = self.get_initial_config_filename()
         self.initial_config = None
         if os.path.exists(initial_config_path):
-            print(f"Loading initial configurations from {initial_config_path}")
+            # print(f"Loading initial configurations from {initial_config_path}")
             with open(initial_config_path, "rb") as f:
                 self.initial_config = pickle.load(f)
 
@@ -285,7 +290,7 @@ class StandupEnv(gymnasium.Env):
 
         state_current = [*self.q_history[-1], self.tilt_history[-1]]
 
-        reward = np.exp(-20*(np.linalg.norm(np.array(state_current) - np.array(self.options["desired_state"]))**2))
+        reward = np.exp(-20 * (np.linalg.norm(np.array(state_current) - np.array(self.options["desired_state"])) ** 2))
 
         action_variation = np.abs(action - self.previous_actions[-1])
         self.previous_actions.append(action)
@@ -368,7 +373,7 @@ class StandupEnv(gymnasium.Env):
     def randomize_fall(self, target: bool = False):
         # Decide if we will use the target
         my_target = np.copy(self.options["desired_state"])
-        if target == False:
+        if target is False:
             target = self.np_random.random() < self.options["reset_final_p"]
 
         # Selecting a random configuration
@@ -396,18 +401,24 @@ class StandupEnv(gymnasium.Env):
         self.sim.set_T_world_site("trunk", T_world_trunk)
 
         # Wait for the robot to stabilize
-        for k in range(round(self.options["stabilization_time"] / self.sim.dt)):
+        for _ in range(round(self.options["stabilization_time"] / self.sim.dt)):
             self.sim.step()
 
     def reset(
         self,
         seed: int = None,
-        target: bool = False,
-        use_cache: bool = True,
-        options: dict = {},
+        options: Optional[dict] = None,
     ):
         super().reset(seed=seed)
         self.sim.reset()
+        options = options or {}
+        target = options.get("target", False)
+        use_cache = options.get("use_cache", True)
+
+        if use_cache and self.initial_config is None:
+            warnings.warn(
+                "use_cache=True but no initial config file could be loaded. Did you run standup_generate_initial.py?"
+            )
 
         # Initial robot configuration
         if use_cache and self.initial_config is not None:
